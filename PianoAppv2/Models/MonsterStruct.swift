@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Monster: ObservableObject, Codable {
+class Monster: Codable {
     var name: String
     var img: String
     var hp: Int
@@ -86,5 +86,30 @@ class StandardMonster: Monster {
     override init(name: String, img: String, hp: Int) {
         self.artist = ""
         super.init(name: name, img: img, hp: hp)
+    }
+}
+
+class MiniBoss: Monster {
+    func archive() {
+        // Step 1: Get the path to the Documents directory
+        let fileManager = FileManager.default
+        let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+
+        // Step 2: Create a path for the JSON file
+        let jsonFilePath = documentsDirectory.appendingPathComponent("MiniBoss.json")
+
+        // Step 3: Encode data
+        do {
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted //readable format
+            let jsonData = try encoder.encode(self)
+            
+            // Step 5: Write the JSON data to the file in the Documents directory
+            try jsonData.write(to: jsonFilePath)
+            print("JSON data was written to the file successfully at: \(jsonFilePath)")
+            
+        } catch {
+            print("Error while writing to file: \(error.localizedDescription)")
+        }
     }
 }

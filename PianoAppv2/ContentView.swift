@@ -8,15 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
-    //new test comment 2
+    @StateObject var monsterDeck = MonsterDeck()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        ImagePickerView(monsterDeck: monsterDeck)
     }
 }
 
