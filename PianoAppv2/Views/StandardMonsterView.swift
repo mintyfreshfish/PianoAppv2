@@ -8,11 +8,41 @@
 import SwiftUI
 
 struct StandardMonsterView: View {
+    @ObservedObject var monsterDeck: MonsterDeck
+    @State var monster: StandardMonster? = nil
+    @State private var userInput: String = ""
+    
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            if let monster = monster {
+                MonsterHeaderView(monster: monster, userInput: $userInput)
+                
+                Button("ATTACK!") {
+                    if let damage = Int(userInput) {
+                        withAnimation {
+                            monster.addDmg(dmg: damage)
+                        }
+                        userInput = ""
+                    }
+                    monsterDeck.archive()
+                }
+                .padding()
+                .background(Color(red: 1, green: 0.557, blue: 0))
+                .clipShape(Capsule())
+                .font(Font.custom("PermanentMarker-Regular", size: 30))
+                .foregroundColor(Color.black)
+            } else {
+                Text("Loading monster...")
+            }
+        }
+        .onAppear {
+            monster = monsterDeck.monsters.first
+        }
+        
     }
 }
 
 #Preview {
-    StandardMonsterView()
+    StandardMonsterView(monsterDeck: MonsterDeck())
 }

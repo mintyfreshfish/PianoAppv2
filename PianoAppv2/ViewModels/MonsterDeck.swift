@@ -44,6 +44,10 @@ class MonsterDeck: ObservableObject {
         monsters.append(monster)
     }
     
+    func remMonster(monster: StandardMonster) {
+        self.monsters.removeAll { $0.name == monster.name }
+    }
+    
     func archive() {
         // Step 1: Get the path to the Documents directory
         let fileManager = FileManager.default

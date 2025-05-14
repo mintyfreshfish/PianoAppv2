@@ -11,7 +11,14 @@ struct ContentView: View {
     @StateObject var monsterDeck = MonsterDeck()
     
     var body: some View {
-        ImagePickerView(monsterDeck: monsterDeck)
+        TabView {
+            SettingsView(monsterDeck: monsterDeck)
+            StandardMonsterView(monsterDeck: monsterDeck)
+            
+            
+            
+        }
+        .tabViewStyle(PageTabViewStyle())
     }
 }
 

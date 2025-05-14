@@ -17,6 +17,7 @@ struct ImagePickerView: View {
     @State private var hp: String = ""
     @State private var artist: String = ""
     @State private var miniboss: Bool = false
+    @State private var selectedMonster: StandardMonster?
     
     var body: some View {
         Form {
@@ -29,9 +30,7 @@ struct ImagePickerView: View {
                 }
                 Toggle(isOn: $miniboss) { Text("Miniboss?")
                 }
-            }
-            
-            Section(header: Text("Image")) {
+                //image picker
                 if let data = selectedImageData, let uiImage = UIImage(data: data) {
                     Image(uiImage: uiImage)
                         .resizable()
@@ -47,41 +46,78 @@ struct ImagePickerView: View {
                             }
                         }
                     }
-            }
-            
-            Button("Save Monster") {
-                func checkData() -> Bool {
-                    if name != "" && hp != "" && selectedImageData != nil {
-                        return true
-                    }
-                    return false
-                }
                 
-                if checkData() {
-                    //change imageData into string filename and save to docs folder
-                    let filename = UUID().uuidString + ".png"
-                    let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(filename)
-                    do {
-                        try selectedImageData?.write(to: url)
-                    } catch {
-                        print ("Could not save imageData")
+                Button("Save Monster") {
+                    func checkData() -> Bool {
+                        if name != "" && hp != "" && selectedImageData != nil {
+                            return true
+                        }
+                        return false
                     }
-
-                    //create monster and save
-                    if miniboss {
-                        let newMonster = MiniBoss(name: name, img: filename, hp: Int(hp)!)
-                        newMonster.archive()
+                    
+                    if checkData() {
+                        //change imageData into string filename and save to docs folder
+                        let filename = UUID().uuidString + ".png"
+                        let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(filename)
+                        do {
+                            try selectedImageData?.write(to: url)
+                        } catch {
+                            print ("Could not save imageData")
+                        }
+                        
+                        //create monster and save
+                        if miniboss {
+                            let newMonster = MiniBoss(name: name, img: filename, hp: Int(hp)!)
+                            newMonster.archive()
+                        } else {
+                            let newMonster = StandardMonster(name: name, img: filename, hp: Int(hp)!, artist: artist)
+                            monsterDeck.addMonster(monster: newMonster)
+                            monsterDeck.archive()
+                        }
+                        
+                        //reset values
+                        name = ""
+                        hp = ""
+                        artist = ""
+                        selectedImageData = nil
+                        selectedItem = nil
+                        miniboss = false
                     } else {
-                        let newMonster = StandardMonster(name: name, img: filename, hp: Int(hp)!, artist: artist)
-                        monsterDeck.addMonster(monster: newMonster)
-                        monsterDeck.archive()
+                        print("invalid data")
                     }
-                } else {
-                    print("invalid data")
+                }
+            }
+                
+                Section(header: Text("Your Monsters")) {
+                    if selectedMonster != nil {
+                        Button("Delete Monster") {
+                            monsterDeck.remMonster(monster: selectedMonster!)
+                            monsterDeck.archive()
+                            selectedMonster = nil
+                        }
+                    }
+                    ForEach(monsterDeck.monsters, id: \.self) {
+                        monster in HStack() {
+                            if let uiImage = monster.loadImage() {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 100.0)
+                            } else {Text("Image Unavailable")}
+                            VStack() {
+                                Text(monster.name)
+                                Text(String(monster.hp))
+                                Text(monster.artist)
+                            }
+                        }
+                        .background(selectedMonster == monster ? Color.yellow : Color.clear)
+                        .onTapGesture {
+                            selectedMonster = monster
+                        }
+                    }
                 }
                 
-                
-            }
+
             
             
         }

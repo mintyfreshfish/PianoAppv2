@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import SwiftUI
 
-class Monster: Codable {
+class Monster: Codable, ObservableObject {
     var name: String
     var img: String
     var hp: Int
@@ -17,6 +18,13 @@ class Monster: Codable {
         self.name = name
         self.img = img
         self.hp = hp
+        self.damage = 0
+    }
+    
+    init() {
+        self.name = "SampleMonster"
+        self.img = "cosmicDragon"
+        self.hp = 100
         self.damage = 0
     }
     
@@ -57,6 +65,28 @@ class Monster: Codable {
     func dmgPercent() -> Double {
         return Double(self.damage) / Double(self.hp)
     }
+    
+    func loadImage() -> UIImage? {
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let filepath = documentsDirectory.appendingPathComponent(self.img)
+        
+        if let data = try? Data(contentsOf: filepath),
+           let image = UIImage(data: data) {
+            return image
+        } else {
+            return nil
+        }
+    }
+}
+
+extension Monster: Hashable {
+    static func == (lhs: Monster, rhs: Monster) -> Bool {
+        return lhs.name == rhs.name
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+    }
 }
 
 class StandardMonster: Monster {
@@ -65,6 +95,11 @@ class StandardMonster: Monster {
     init(name: String, img: String, hp: Int, artist: String) {
         self.artist = artist
         super.init(name: name, img: img, hp: hp)
+    }
+    
+    override init() {
+        self.artist = "testArtist"
+        super.init()
     }
     
     enum CodingKeys: String, CodingKey {
