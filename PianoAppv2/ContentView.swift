@@ -9,11 +9,12 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var monsterDeck = MonsterDeck()
+    @State var selectedMonster: StandardMonster? = nil
     
     var body: some View {
         TabView {
-            SettingsView(monsterDeck: monsterDeck)
-            StandardMonsterView(monsterDeck: monsterDeck)
+            SettingsView(monsterDeck: monsterDeck, selectedMonster: $selectedMonster)
+            StandardMonsterView(monsterDeck: monsterDeck, selectedMonster: $selectedMonster)
             
             
             
@@ -22,6 +23,6 @@ struct ContentView: View {
     }
 }
 
-#Preview {
-    ContentView()
-}
+//#Preview {
+//    ContentView()
+//}

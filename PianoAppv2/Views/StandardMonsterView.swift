@@ -9,6 +9,8 @@ import SwiftUI
 
 struct StandardMonsterView: View {
     @ObservedObject var monsterDeck: MonsterDeck
+    @Binding var selectedMonster: StandardMonster?
+    
     @State var monster: StandardMonster? = nil
     @State private var userInput: String = ""
     
@@ -37,12 +39,12 @@ struct StandardMonsterView: View {
             }
         }
         .onAppear {
-            monster = monsterDeck.monsters.first
+            monster = selectedMonster
         }
         
     }
 }
 
-#Preview {
-    StandardMonsterView(monsterDeck: MonsterDeck())
-}
+//#Preview {
+//    StandardMonsterView(monsterDeck: MonsterDeck())
+//}

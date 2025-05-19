@@ -10,6 +10,7 @@ import PhotosUI
 
 struct ImagePickerView: View {
     @ObservedObject var monsterDeck: MonsterDeck
+    @Binding var selectedMonster: StandardMonster?
     
     @State private var selectedItem: PhotosPickerItem?
     @State private var selectedImageData: Data?
@@ -17,7 +18,7 @@ struct ImagePickerView: View {
     @State private var hp: String = ""
     @State private var artist: String = ""
     @State private var miniboss: Bool = false
-    @State private var selectedMonster: StandardMonster?
+    
     
     var body: some View {
         Form {

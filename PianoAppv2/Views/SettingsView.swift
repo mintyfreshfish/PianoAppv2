@@ -9,12 +9,13 @@ import SwiftUI
 
 struct SettingsView: View {
     @ObservedObject var monsterDeck: MonsterDeck
+    @Binding var selectedMonster: StandardMonster?
     
     var body: some View {
-        ImagePickerView(monsterDeck: monsterDeck)
+        ImagePickerView(monsterDeck: monsterDeck, selectedMonster: $selectedMonster)
     }
 }
 
-#Preview {
-    SettingsView(monsterDeck: MonsterDeck())
-}
+//#Preview {
+//    SettingsView(monsterDeck: MonsterDeck())
+//}
