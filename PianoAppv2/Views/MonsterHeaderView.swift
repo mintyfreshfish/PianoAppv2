@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MonsterHeaderView: View {
-    @ObservedObject var monster: Monster
+    var battle: Battle
     @Binding var userInput: String
     let numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
@@ -16,9 +16,9 @@ struct MonsterHeaderView: View {
     var body: some View {
         VStack {
             // HEADER
-                Text(monster.name)
+            Text(battle.monster.name)
                     .font(Font.custom("PermanentMarker-Regular", size: 50))
-            if let uiImage = monster.loadImage() {
+            if let uiImage = battle.monster.loadImage() {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFit()
@@ -26,10 +26,10 @@ struct MonsterHeaderView: View {
             }
             
             HStack {
-                Text((monster as? StandardMonster)?.artist ?? "MiniBoss")
+                Text((battle.monster as? StandardMonster)?.artist ?? "MiniBoss")
                     .font(Font.custom("PermanentMarker-Regular", size: 20))
                     .padding(.trailing, 100.0)
-                Text("Hit Points: \(monster.hp)")
+                Text("Hit Points: \(battle.monster.hp)")
                     .font(Font.custom("PermanentMarker-Regular", size: 20))
             }
             
@@ -38,10 +38,10 @@ struct MonsterHeaderView: View {
             HStack {
                 Rectangle()
                     .fill(.red)
-                    .frame(width: monster.dmgPercent()*1000, height: 50)
+                    .frame(width: battle.dmgPercent()*1000, height: 50)
                 Rectangle()
                     .fill(.white)
-                    .frame(width: (1-monster.dmgPercent())*1000, height: 50)
+                    .frame(width: (1-battle.dmgPercent())*1000, height: 50)
             }
             .padding()
             
@@ -70,12 +70,12 @@ struct MonsterHeaderView: View {
         }
     }
 
-#Preview {
-    struct Preview: View {
-        @State var userInput: String = ""
-        var body: some View {
-            MonsterHeaderView(monster: Monster(), userInput: $userInput)
-        }
-    }
-    return Preview()
-}
+//#Preview {
+//    struct Preview: View {
+//        @State var userInput: String = ""
+//        var body: some View {
+//            MonsterHeaderView(monster: Monster(), userInput: $userInput)
+//        }
+//    }
+//    return Preview()
+//}

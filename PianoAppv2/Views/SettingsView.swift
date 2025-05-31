@@ -9,10 +9,17 @@ import SwiftUI
 
 struct SettingsView: View {
     @ObservedObject var monsterDeck: MonsterDeck
-    @Binding var selectedMonster: StandardMonster?
+    @ObservedObject var teamDeck: TeamDeck
+    @ObservedObject var battleDeck: BattleDeck
+    @Binding var selectedBattle: Battle?
     
     var body: some View {
-        ImagePickerView(monsterDeck: monsterDeck, selectedMonster: $selectedMonster)
+        Form {
+            AddTeamView(teamDeck: teamDeck, monsterDeck: monsterDeck, battleDeck: battleDeck)
+            ImagePickerView(monsterDeck: monsterDeck)
+            MonsterDeckView(monsterDeck: monsterDeck)
+            BattleDeckView(monsterDeck: monsterDeck, battleDeck: battleDeck, selectedBattle: $selectedBattle)
+        }
     }
 }
 

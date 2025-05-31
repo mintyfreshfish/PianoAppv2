@@ -10,7 +10,6 @@ import PhotosUI
 
 struct ImagePickerView: View {
     @ObservedObject var monsterDeck: MonsterDeck
-    @Binding var selectedMonster: StandardMonster?
     
     @State private var selectedItem: PhotosPickerItem?
     @State private var selectedImageData: Data?
@@ -21,8 +20,7 @@ struct ImagePickerView: View {
     
     
     var body: some View {
-        Form {
-            Section(header: Text("Monster Info")) {
+        Section(header: Text("Monster Info")) {
                 TextField("Name", text: $name)
                 TextField("HP", text: $hp)
                     .keyboardType(.numberPad)
@@ -89,38 +87,8 @@ struct ImagePickerView: View {
                 }
             }
                 
-                Section(header: Text("Your Monsters")) {
-                    if selectedMonster != nil {
-                        Button("Delete Monster") {
-                            monsterDeck.remMonster(monster: selectedMonster!)
-                            monsterDeck.archive()
-                            selectedMonster = nil
-                        }
-                    }
-                    ForEach(monsterDeck.monsters, id: \.self) {
-                        monster in HStack() {
-                            if let uiImage = monster.loadImage() {
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 100.0)
-                            } else {Text("Image Unavailable")}
-                            VStack() {
-                                Text(monster.name)
-                                Text(String(monster.hp))
-                                Text(monster.artist)
-                            }
-                        }
-                        .background(selectedMonster == monster ? Color.yellow : Color.clear)
-                        .onTapGesture {
-                            selectedMonster = monster
-                        }
-                    }
-                }
-                
 
             
             
-        }
     }
 }

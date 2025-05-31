@@ -48,24 +48,6 @@ class Monster: Codable, ObservableObject {
         try container.encode(damage, forKey: .damage)
     }
     
-    func addDmg(dmg: Int) {
-        self.damage += dmg
-        if self.damage > self.hp {
-            self.damage = self.hp
-        }
-    }
-    
-    func subDmg(dmg: Int) {
-        self.damage -= dmg
-        if self.damage < 0 {
-            self.damage = 0
-        }
-    }
-    
-    func dmgPercent() -> Double {
-        return Double(self.damage) / Double(self.hp)
-    }
-    
     func loadImage() -> UIImage? {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let filepath = documentsDirectory.appendingPathComponent(self.img)

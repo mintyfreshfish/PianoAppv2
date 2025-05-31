@@ -8,26 +8,26 @@
 import SwiftUI
 
 struct StandardMonsterView: View {
-    @ObservedObject var monsterDeck: MonsterDeck
-    @Binding var selectedMonster: StandardMonster?
+    @ObservedObject var battleDeck: BattleDeck
+    @Binding var selectedBattle: Battle?
     
-    @State var monster: StandardMonster? = nil
+    @State var battle: Battle? = nil
     @State private var userInput: String = ""
     
     
     var body: some View {
         VStack {
-            if let monster = monster {
-                MonsterHeaderView(monster: monster, userInput: $userInput)
+            if let battle = battle {
+                MonsterHeaderView(battle: battle, userInput: $userInput)
                 
                 Button("ATTACK!") {
                     if let damage = Int(userInput) {
                         withAnimation {
-                            monster.addDmg(dmg: damage)
+                            battle.addDmg(dmg: damage)
                         }
                         userInput = ""
                     }
-                    monsterDeck.archive()
+                    battleDeck.archive()
                 }
                 .padding()
                 .background(Color(red: 1, green: 0.557, blue: 0))
@@ -39,7 +39,7 @@ struct StandardMonsterView: View {
             }
         }
         .onAppear {
-            monster = selectedMonster
+            battle = selectedBattle
         }
         
     }

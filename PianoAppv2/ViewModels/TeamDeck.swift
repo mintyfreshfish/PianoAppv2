@@ -7,11 +7,11 @@
 
 import Foundation
 
-class BattleDeck: ObservableObject {
-    @Published var battles: [Battle]
+class TeamDeck: ObservableObject {
+    @Published var teams: [Team]
     
-    init(monsterDeck: MonsterDeck, teamDeck: TeamDeck) {
-        func decodeBattles(fromFile fileName: String) -> [Codable_Battle]? {
+    init() {
+        func decodeTeams(fromFile fileName: String) -> [Team]? {
             let fileManager = FileManager.default
 
             // Get the path to the Documents folder
@@ -28,45 +28,39 @@ class BattleDeck: ObservableObject {
                 let jsonData = try Data(contentsOf: fileURL)
 
                 // Decode the JSON data
-                let battles = try JSONDecoder().decode([Codable_Battle].self, from: jsonData)
-                return battles
+                let teams = try JSONDecoder().decode([Team].self, from: jsonData)
+                return teams
             } catch {
                 print("Error decoding JSON from file: \(error)")
                 return nil
             }
         }
         
-        let codableBattles = decodeBattles(fromFile: "battleDeck.json") ?? []
-        let workingBattles = codableBattles.map{Battle(archivedBattle: $0, monsterDeck: monsterDeck, teamDeck: teamDeck)}
-        
-        
-        
-        self.battles = workingBattles
+        let arr = decodeTeams(fromFile: "teamDeck.json") ?? []
+        self.teams = arr
     }
     
-    func addBattle(battle: Battle) {
-        battles.append(battle)
+    func addTeam(team: Team) {
+        teams.append(team)
     }
     
-    func remBattle(battle: Battle) {
-        self.battles.removeAll { $0.id == battle.id }
+    func remTeam(team: Team) {
+        self.teams.removeAll { $0.name == team.name }
     }
     
     func archive() {
-        let codableBattles = self.battles.map{$0.toCodable()}
-        
         // Step 1: Get the path to the Documents directory
         let fileManager = FileManager.default
         let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
 
         // Step 2: Create a path for the JSON file
-        let jsonFilePath = documentsDirectory.appendingPathComponent("battleDeck.json")
+        let jsonFilePath = documentsDirectory.appendingPathComponent("teamDeck.json")
 
         // Step 3: Encode data
         do {
             let encoder = JSONEncoder()
             encoder.outputFormatting = .prettyPrinted //readable format
-            let jsonData = try encoder.encode(codableBattles)
+            let jsonData = try encoder.encode(self.teams)
             
             // Step 5: Write the JSON data to the file in the Documents directory
             try jsonData.write(to: jsonFilePath)
@@ -76,7 +70,4 @@ class BattleDeck: ObservableObject {
             print("Error while writing to file: \(error.localizedDescription)")
         }
     }
-    
-    
-    
 }

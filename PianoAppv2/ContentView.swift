@@ -8,13 +8,25 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var monsterDeck = MonsterDeck()
-    @State var selectedMonster: StandardMonster? = nil
+    @StateObject private var monsterDeck: MonsterDeck
+    @StateObject private var teamDeck: TeamDeck
+    @StateObject private var battleDeck: BattleDeck
+    @State var selectedBattle: Battle? = nil
+    
+    init() {
+            let monsterDeck = MonsterDeck()
+            let teamDeck = TeamDeck()
+            let battleDeck = BattleDeck(monsterDeck: monsterDeck, teamDeck: teamDeck)
+
+            _monsterDeck = StateObject(wrappedValue: monsterDeck)
+            _teamDeck = StateObject(wrappedValue: teamDeck)
+            _battleDeck = StateObject(wrappedValue: battleDeck)
+        }
     
     var body: some View {
         TabView {
-            SettingsView(monsterDeck: monsterDeck, selectedMonster: $selectedMonster)
-            StandardMonsterView(monsterDeck: monsterDeck, selectedMonster: $selectedMonster)
+            SettingsView(monsterDeck: monsterDeck, teamDeck: teamDeck, battleDeck: battleDeck, selectedBattle: $selectedBattle)
+            StandardMonsterView(battleDeck: battleDeck, selectedBattle: $selectedBattle)
             
             
             
