@@ -48,8 +48,8 @@ class BattleDeck: ObservableObject {
         battles.append(battle)
     }
     
-    func remBattle(battle: Battle) {
-        self.battles.removeAll { $0.id == battle.id }
+    func remBattle(team: Team) {
+        self.battles.removeAll { $0.team == team }
     }
     
     func archive() {

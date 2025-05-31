@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MonsterHeaderView: View {
-    var battle: Battle
+    @ObservedObject var battle: Battle
     @Binding var userInput: String
     let numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
@@ -29,7 +29,7 @@ struct MonsterHeaderView: View {
                 Text((battle.monster as? StandardMonster)?.artist ?? "MiniBoss")
                     .font(Font.custom("PermanentMarker-Regular", size: 20))
                     .padding(.trailing, 100.0)
-                Text("Hit Points: \(battle.monster.hp)")
+                Text("Hit Points: \(battle.hp)")
                     .font(Font.custom("PermanentMarker-Regular", size: 20))
             }
             
@@ -39,9 +39,15 @@ struct MonsterHeaderView: View {
                 Rectangle()
                     .fill(.red)
                     .frame(width: battle.dmgPercent()*1000, height: 50)
+                    .overlay(
+                        Text(String(battle.dmg))
+                    )
                 Rectangle()
                     .fill(.white)
                     .frame(width: (1-battle.dmgPercent())*1000, height: 50)
+                    .overlay(
+                        Text(String(battle.hp-battle.dmg))
+                    )
             }
             .padding()
             

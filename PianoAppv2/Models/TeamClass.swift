@@ -32,3 +32,13 @@ class Team: ObservableObject, Codable {
         try container.encode(name, forKey: .name)
     }
 }
+
+extension Team: Hashable {
+    static func == (lhs: Team, rhs: Team) -> Bool {
+        return lhs.name == rhs.name
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+    }
+}

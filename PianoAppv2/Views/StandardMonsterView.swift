@@ -11,15 +11,13 @@ struct StandardMonsterView: View {
     @ObservedObject var battleDeck: BattleDeck
     @Binding var selectedBattle: Battle?
     
-    @State var battle: Battle? = nil
     @State private var userInput: String = ""
-    
     
     var body: some View {
         VStack {
-            if let battle = battle {
+            if let battle = selectedBattle {
                 MonsterHeaderView(battle: battle, userInput: $userInput)
-                
+
                 Button("ATTACK!") {
                     if let damage = Int(userInput) {
                         withAnimation {
@@ -38,12 +36,9 @@ struct StandardMonsterView: View {
                 Text("Loading monster...")
             }
         }
-        .onAppear {
-            battle = selectedBattle
-        }
-        
     }
 }
+
 
 //#Preview {
 //    StandardMonsterView(monsterDeck: MonsterDeck())

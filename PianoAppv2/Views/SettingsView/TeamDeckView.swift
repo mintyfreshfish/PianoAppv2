@@ -7,36 +7,30 @@
 
 import SwiftUI
 
-struct MonsterDeckView: View {
-    @ObservedObject var monsterDeck: MonsterDeck
-    @State var selectedMonster: StandardMonster?
+struct TeamDeckView: View {
+    @ObservedObject var teamDeck: TeamDeck
+    @ObservedObject var battleDeck: BattleDeck
+    @State var selectedTeam: Team?
     
     var body: some View {
-        Section(header: Text("Your Monsters")) {
-            if selectedMonster != nil {
-                Button("Delete Monster") {
-                    monsterDeck.remMonster(monster: selectedMonster!)
-                    monsterDeck.archive()
-                    selectedMonster = nil
+        Section(header: Text("Your Teams")) {
+            if selectedTeam != nil {
+                Button("Delete Team") {
+                    teamDeck.remTeam(team: selectedTeam!)
+                    teamDeck.archive()
+                    battleDeck.remBattle(team: selectedTeam!)
+                    battleDeck.archive()
+                    selectedTeam = nil
                 }
             }
             HStack {
-                ForEach(monsterDeck.monsters, id: \.self) {
-                    monster in VStack() {
-                        if let uiImage = monster.loadImage() {
-                            Image(uiImage: uiImage)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 100.0)
-                        } else {Text("Image Unavailable")}
-                        VStack() {
-                            Text("Name: \(monster.name)")
-                            Text("Artist: \(monster.artist)")
-                        }
+                ForEach(teamDeck.teams, id: \.self) {
+                    team in VStack() {
+                        Text("Name: \(team.name)")
                     }
-                    .background(selectedMonster == monster ? Color.yellow : Color.clear)
+                    .background(selectedTeam == team ? Color.yellow : Color.clear)
                     .onTapGesture {
-                        selectedMonster = monster
+                        selectedTeam = team
                     }
                 }
             }

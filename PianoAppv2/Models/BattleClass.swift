@@ -11,8 +11,8 @@ class Battle: ObservableObject {
     var id = UUID()
     var monster: StandardMonster
     var team: Team
-    var hp: Int
-    var dmg: Int
+    @Published var hp: Int
+    @Published var dmg: Int
     
     init(monster: StandardMonster, team: Team) {
         self.monster = monster

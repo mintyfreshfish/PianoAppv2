@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct BattleRowView: View {
-    let battle: Battle
-    let isSelected: Bool
+    @ObservedObject var battle: Battle
+    var isSelected: Bool
 
     var body: some View {
         HStack {

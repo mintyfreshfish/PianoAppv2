@@ -16,6 +16,7 @@ struct SettingsView: View {
     var body: some View {
         Form {
             AddTeamView(teamDeck: teamDeck, monsterDeck: monsterDeck, battleDeck: battleDeck)
+            TeamDeckView(teamDeck: teamDeck, battleDeck: battleDeck)
             ImagePickerView(monsterDeck: monsterDeck)
             MonsterDeckView(monsterDeck: monsterDeck)
             BattleDeckView(monsterDeck: monsterDeck, battleDeck: battleDeck, selectedBattle: $selectedBattle)
