@@ -71,4 +71,13 @@ class MonsterDeck: ObservableObject {
         }
     }
     
+    func nextMonster(monster: StandardMonster) -> StandardMonster {
+        let monsterIndex = monsters.firstIndex(of: monster)!
+        if monsterIndex+1 != monsters.count {
+            return monsters[monsterIndex + 1]
+        } else {
+            return monsters[0]
+        }
+    }
+    
 }

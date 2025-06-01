@@ -22,7 +22,7 @@ struct MonsterHeaderView: View {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 800.0)
+                    .frame(height: 750.0)
             }
             
             HStack {

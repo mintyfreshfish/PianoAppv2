@@ -52,6 +52,10 @@ class Battle: ObservableObject {
         return Double(self.dmg) / Double(self.hp)
     }
     
+    func leftoverDmg(damage: Int) -> Int {
+        return dmg + damage - hp
+    }
+    
     
     
 }

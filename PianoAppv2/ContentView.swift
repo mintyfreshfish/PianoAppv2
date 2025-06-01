@@ -26,7 +26,7 @@ struct ContentView: View {
     var body: some View {
         TabView {
             SettingsView(monsterDeck: monsterDeck, teamDeck: teamDeck, battleDeck: battleDeck, selectedBattle: $selectedBattle)
-            StandardMonsterView(battleDeck: battleDeck, selectedBattle: $selectedBattle)
+            StandardMonsterView(battleDeck: battleDeck, selectedBattle: $selectedBattle, monsterDeck: monsterDeck)
             
             
             
