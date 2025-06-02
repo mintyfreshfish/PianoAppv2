@@ -17,7 +17,7 @@ class Battle: ObservableObject {
     init(monster: StandardMonster, team: Team) {
         self.monster = monster
         self.team = team
-        self.hp = 200
+        self.hp = team.hp()
         self.dmg = 0
     }
     

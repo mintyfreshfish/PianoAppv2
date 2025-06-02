@@ -45,7 +45,7 @@ class TeamDeck: ObservableObject {
     }
     
     func remTeam(team: Team) {
-        self.teams.removeAll { $0.name == team.name }
+        self.teams.removeAll { $0 === team }
     }
     
     func archive() {

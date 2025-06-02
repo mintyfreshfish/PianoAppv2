@@ -11,32 +11,28 @@ import SwiftUI
 class Monster: Codable, ObservableObject {
     var name: String
     var img: String
-    var hp: Int
     var damage: Int
     
-    init(name: String, img: String, hp: Int) {
+    init(name: String, img: String) {
         self.name = name
         self.img = img
-        self.hp = hp
         self.damage = 0
     }
     
     init() {
         self.name = "SampleMonster"
         self.img = "cosmicDragon"
-        self.hp = 100
         self.damage = 0
     }
     
     enum CodingKeys: String, CodingKey {
-        case name, img, hp, damage
+        case name, img, damage
     }
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.name = try container.decode(String.self, forKey: .name)
         self.img = try container.decode(String.self, forKey: .img)
-        self.hp = try container.decode(Int.self, forKey: .hp)
         self.damage = try container.decode(Int.self, forKey: .damage)
     }
     
@@ -44,7 +40,6 @@ class Monster: Codable, ObservableObject {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(name, forKey: .name)
         try container.encode(img, forKey: .img)
-        try container.encode(hp, forKey: .hp)
         try container.encode(damage, forKey: .damage)
     }
     
@@ -74,9 +69,9 @@ extension Monster: Hashable {
 class StandardMonster: Monster {
     var artist: String
     
-    init(name: String, img: String, hp: Int, artist: String) {
+    init(name: String, img: String, artist: String) {
         self.artist = artist
-        super.init(name: name, img: img, hp: hp)
+        super.init(name: name, img: img)
     }
     
     override init() {
@@ -100,9 +95,9 @@ class StandardMonster: Monster {
         try super.encode(to: encoder)
     }
     
-    override init(name: String, img: String, hp: Int) {
+    override init(name: String, img: String) {
         self.artist = ""
-        super.init(name: name, img: img, hp: hp)
+        super.init(name: name, img: img)
     }
 }
 

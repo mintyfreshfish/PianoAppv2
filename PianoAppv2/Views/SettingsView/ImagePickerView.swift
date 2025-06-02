@@ -14,7 +14,6 @@ struct ImagePickerView: View {
     @State private var selectedItem: PhotosPickerItem?
     @State private var selectedImageData: Data?
     @State private var name: String = ""
-    @State private var hp: String = ""
     @State private var artist: String = ""
     @State private var miniboss: Bool = false
     
@@ -22,8 +21,6 @@ struct ImagePickerView: View {
     var body: some View {
         Section(header: Text("Monster Info")) {
                 TextField("Name", text: $name)
-                TextField("HP", text: $hp)
-                    .keyboardType(.numberPad)
                 if (!miniboss) {
                     TextField("Artist", text: $artist)
                 }
@@ -48,7 +45,7 @@ struct ImagePickerView: View {
                 
                 Button("Save Monster") {
                     func checkData() -> Bool {
-                        if name != "" && hp != "" && selectedImageData != nil {
+                        if name != "" && selectedImageData != nil {
                             return true
                         }
                         return false
@@ -66,17 +63,16 @@ struct ImagePickerView: View {
                         
                         //create monster and save
                         if miniboss {
-                            let newMonster = MiniBoss(name: name, img: filename, hp: Int(hp)!)
+                            let newMonster = MiniBoss(name: name, img: filename)
                             newMonster.archive()
                         } else {
-                            let newMonster = StandardMonster(name: name, img: filename, hp: Int(hp)!, artist: artist)
+                            let newMonster = StandardMonster(name: name, img: filename, artist: artist)
                             monsterDeck.addMonster(monster: newMonster)
                             monsterDeck.archive()
                         }
                         
                         //reset values
                         name = ""
-                        hp = ""
                         artist = ""
                         selectedImageData = nil
                         selectedItem = nil

@@ -12,8 +12,47 @@ struct TeamDeckView: View {
     @ObservedObject var battleDeck: BattleDeck
     @State var selectedTeam: Team?
     
+    @State var name: String = ""
+    @State var minHP: String = ""
+    @State var maxHP: String = ""
+    
     var body: some View {
         Section(header: Text("Your Teams")) {
+            if selectedTeam != nil {
+                HStack {
+                    
+                    TextField("minHP", text: $minHP)
+                        .keyboardType(.numberPad)
+                    Button("Update minHP") {
+                        if let newminHP = Int(minHP), !minHP.isEmpty {
+                            selectedTeam?.minHP = newminHP
+                            teamDeck.archive()
+                            minHP = ""
+                        }
+                    }
+                    
+                    TextField("maxHP", text: $maxHP)
+                        .keyboardType(.numberPad)
+                    Button("Update maxHP") {
+                        if let newmaxHP = Int(maxHP), !maxHP.isEmpty {
+                            selectedTeam?.maxHP = newmaxHP
+                            teamDeck.archive()
+                            maxHP = ""
+                        }
+                    }
+                    
+                    
+
+                }
+            }
+            HStack {
+                ForEach(teamDeck.teams, id: \.self) {
+                    team in TeamRowView(team: team, isSelected: selectedTeam == team)
+                    .onTapGesture {
+                        selectedTeam = team
+                    }
+                }
+            }
             if selectedTeam != nil {
                 Button("Delete Team") {
                     teamDeck.remTeam(team: selectedTeam!)
@@ -21,17 +60,6 @@ struct TeamDeckView: View {
                     battleDeck.remBattle(team: selectedTeam!)
                     battleDeck.archive()
                     selectedTeam = nil
-                }
-            }
-            HStack {
-                ForEach(teamDeck.teams, id: \.self) {
-                    team in VStack() {
-                        Text("Name: \(team.name)")
-                    }
-                    .background(selectedTeam == team ? Color.yellow : Color.clear)
-                    .onTapGesture {
-                        selectedTeam = team
-                    }
                 }
             }
         }
