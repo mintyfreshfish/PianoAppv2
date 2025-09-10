@@ -62,11 +62,30 @@ class StudentDeck: ObservableObject {
         }
     } //end archive()
     
-    func addStudent(name: String) {
-        self.students.append(Student(name: name))
+    func addStudent(name: String, teamName: String) {
+        if name != "" && teamName != "" {
+            self.students.append(Student(name: name, teamName: teamName))
+        }
     } //end addStudent()
     
     func remStudent(name: String) {
         self.students.removeAll { $0.name == name }
     } //end remStudent()
+    
+    func retStudentsByTeam(team: String) -> [Student] {
+        return self.students.filter { $0.teamName == team }
+    } //end retStudentsByTeam
+    
+    func indexOf(name: String) -> Int? {
+        return self.students.firstIndex { $0.name == name }
+    }
+    
+    func resetScores(teamName: String) {
+        for student in students {
+            if student.teamName == teamName {
+                student.score = 0
+            }
+        }
+    }
+    
 } //end class

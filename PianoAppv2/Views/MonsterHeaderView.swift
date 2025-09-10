@@ -9,20 +9,37 @@ import SwiftUI
 
 struct MonsterHeaderView: View {
     @ObservedObject var battle: Battle
-    @Binding var userInput: String
-    let numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    @ObservedObject var studentDeck: StudentDeck
+    @Binding var dmg: Int
+    @Binding var selectedStudent: String
+    
+    @State private var showSheet = false
+    
+    var topThree: [Student] {
+        studentDeck.retStudentsByTeam(team: battle.team.name)
+            .sorted {$0.score > $1.score}
+            .prefix(3)
+            .map { $0 }
+    }
+    
+    var medals = ["🥇", "🥈", "🥉"]
+    var studentNames: [String] {
+        studentDeck.retStudentsByTeam(team: battle.team.name)
+            .map { $0.name }
+    }
 
     
     var body: some View {
         VStack {
             // HEADER
+            Text(battle.team.name)
             Text(battle.monster.name)
                     .font(Font.custom("PermanentMarker-Regular", size: 50))
             if let uiImage = battle.monster.loadImage() {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFit()
-                    .frame(height: 750.0)
+                    .frame(height: 740.0)
             }
             
             HStack {
@@ -51,27 +68,20 @@ struct MonsterHeaderView: View {
             }
             .padding()
             
-            //User Input
-            Text(userInput == "" ? "Enter Damage" : userInput)
-                .font(Font.custom("PermanentMarker-Regular", size: 40))
-                .padding()
-            
-            HStack {
-                ForEach(numbers, id: \.self) { number in
-                    Button(number, action: {userInput += number})
-                        .padding()
-                        .background(Color.white)
-                        .clipShape(Rectangle())
-                        .font(Font.custom("PermanentMarker-Regular", size: 20))
-                        .foregroundColor(Color.black)
+            //Leaderboard
+            VStack {
+                Text("Leaderboard")
+                        .font(Font.custom("PermanentMarker-Regular", size: 30))
+                ForEach(Array(topThree.enumerated()), id: \.element.id) { index, student in
+                    Text("\(medals[index]) \(student.name): \(student.score)")
                 }
-                Button("Undo", action: {userInput = String(userInput.dropLast())})
-                    .padding()
-                    .background(Color.white)
-                    .clipShape(Rectangle())
-                    .font(Font.custom("PermanentMarker-Regular", size: 20))
-                    .foregroundColor(Color.black)
             }
+        }
+        .onTapGesture {
+            showSheet = true
+        }
+        .sheet(isPresented: $showSheet) {
+            AttackSheetView(battle: battle, dmg: $dmg, selectedStudent: $selectedStudent, showSheet: $showSheet,  studentNames: studentNames)
         }
         }
     }

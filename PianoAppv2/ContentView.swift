@@ -11,22 +11,25 @@ struct ContentView: View {
     @StateObject private var monsterDeck: MonsterDeck
     @StateObject private var teamDeck: TeamDeck
     @StateObject private var battleDeck: BattleDeck
+    @StateObject private var studentDeck: StudentDeck
     @State var selectedBattle: Battle? = nil
     
     init() {
             let monsterDeck = MonsterDeck()
             let teamDeck = TeamDeck()
             let battleDeck = BattleDeck(monsterDeck: monsterDeck, teamDeck: teamDeck)
+            let studentDeck = StudentDeck()
 
             _monsterDeck = StateObject(wrappedValue: monsterDeck)
             _teamDeck = StateObject(wrappedValue: teamDeck)
             _battleDeck = StateObject(wrappedValue: battleDeck)
+            _studentDeck = StateObject(wrappedValue: studentDeck)
         }
     
     var body: some View {
         TabView {
-            SettingsView(monsterDeck: monsterDeck, teamDeck: teamDeck, battleDeck: battleDeck, selectedBattle: $selectedBattle)
-            StandardMonsterView(battleDeck: battleDeck, selectedBattle: $selectedBattle, monsterDeck: monsterDeck)
+            SettingsView(monsterDeck: monsterDeck, teamDeck: teamDeck, battleDeck: battleDeck, studentDeck: studentDeck, selectedBattle: $selectedBattle)
+            StandardMonsterView(battleDeck: battleDeck, studentDeck: studentDeck, selectedBattle: $selectedBattle, monsterDeck: monsterDeck)
             
             
             

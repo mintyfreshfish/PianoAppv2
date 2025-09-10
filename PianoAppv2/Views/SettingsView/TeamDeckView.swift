@@ -10,16 +10,26 @@ import SwiftUI
 struct TeamDeckView: View {
     @ObservedObject var teamDeck: TeamDeck
     @ObservedObject var battleDeck: BattleDeck
+    @ObservedObject var studentDeck: StudentDeck
     @State var selectedTeam: Team?
+    @State var selectedStudent: Student?
     
     @State var name: String = ""
     @State var minHP: String = ""
     @State var maxHP: String = ""
+    @State var studentName: String = ""
     
     var body: some View {
         Section(header: Text("Your Teams")) {
             if selectedTeam != nil {
                 HStack {
+                    
+                    TextField("student name", text: $studentName)
+                    Button("Add Student") {
+                        studentDeck.addStudent(name: studentName, teamName: selectedTeam!.name)
+                        studentDeck.archive()
+                        studentName = ""
+                    }
                     
                     TextField("minHP", text: $minHP)
                         .keyboardType(.numberPad)
@@ -47,7 +57,7 @@ struct TeamDeckView: View {
             }
             HStack {
                 ForEach(teamDeck.teams, id: \.self) {
-                    team in TeamRowView(team: team, isSelected: selectedTeam == team)
+                    team in TeamRowView(team: team, studentList: studentDeck.retStudentsByTeam(team: team.name), isSelected: selectedTeam == team)
                     .onTapGesture {
                         selectedTeam = team
                     }
@@ -61,6 +71,16 @@ struct TeamDeckView: View {
                     battleDeck.archive()
                     selectedTeam = nil
                 }
+                Picker("Student", selection: $selectedStudent) {
+                    ForEach(studentDeck.retStudentsByTeam(team: selectedTeam!.name), id: \.self) {
+                        student in Text(student.name).tag(Optional(student))
+                    }
+                }
+                Button("Remove Student") {
+                    studentDeck.remStudent(name: selectedStudent!.name)
+                    studentDeck.archive()
+                }
+                
             }
         }
     }
