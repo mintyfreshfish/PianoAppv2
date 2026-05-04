@@ -18,14 +18,17 @@ struct AttackSheetView: View {
     
     var body: some View {
         //Student Picker
-        Picker("Student", selection: $selectedStudent)
-        {
-            ForEach(studentNames, id: \.self) {
-                student in
-                Text(student).tag(Optional(student))
+        Picker("Student", selection: $selectedStudent) {
+            
+            // Placeholder (default state)
+            Text("Choose student")
+                .tag(String?.none)
+
+            ForEach(studentNames, id: \.self) { student in
+                Text(student)
+                    .tag(Optional(student))
             }
         }
-        
         //User Input
         Text(userInput == "" ? "Enter Damage" : userInput)
             .font(Font.custom("PermanentMarker-Regular", size: 40))

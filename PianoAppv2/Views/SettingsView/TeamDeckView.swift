@@ -72,6 +72,10 @@ struct TeamDeckView: View {
                     selectedTeam = nil
                 }
                 Picker("Student", selection: $selectedStudent) {
+                    // Placeholder (default state)
+                    Text("Choose student")
+                        .tag(String?.none)
+                    
                     ForEach(studentDeck.retStudentsByTeam(team: selectedTeam!.name), id: \.self) {
                         student in Text(student.name).tag(Optional(student))
                     }

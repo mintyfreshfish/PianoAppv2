@@ -45,6 +45,7 @@ struct StandardMonsterView: View {
         battleDeck.battles[i].addDmg(dmg: damage)
         studentDeck.students[studentDeck.indexOf(name: selectedStudent)!].updateScore(num: damage)
         battleDeck.archive()
+        studentDeck.archive()
     }
     
     var body: some View {
